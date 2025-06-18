@@ -45,6 +45,7 @@ npm start
 Ensure that you have MongoDB running and the environment variables set up for JWT secret and database connection.
 
 ## API Endpoints
+
 ### POST /register
 - **Description**: Registers a new user.
 - **Request Body**:
@@ -55,6 +56,79 @@ Ensure that you have MongoDB running and the environment variables set up for JW
   - `token`: Authentication token
   - `user`: User object
   - `message`: Success message
+
+#### Example Request
+```json
+POST /register
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "securePassword123"
+}
+```
+
+#### Example Response
+```json
+{
+  "token": "<jwt_token>",
+  "user": {
+    "_id": "user_id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "createdAt": "2025-06-17T12:00:00.000Z"
+  },
+  "message": "User registered successfully"
+}
+```
+
+---
+
+### POST /user/login
+- **Description**: Authenticates a user and returns a JWT token.
+- **Request Body**:
+  - `email`: User's email address
+  - `password`: User's password
+- **Response**:
+  - `token`: Authentication token
+  - `user`: User object
+
+#### Example Request
+```json
+POST /user/login
+{
+  "email": "john.doe@example.com",
+  "password": "securePassword123"
+}
+```
+
+#### Example Response
+```json
+{
+  "token": "<jwt_token>",
+  "user": {
+    "_id": "user_id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "createdAt": "2025-06-17T12:00:00.000Z"
+  }
+}
+```
+
+#### Error Response Example
+```json
+{
+  "message": "Invalid email or password"
+}
+```
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
