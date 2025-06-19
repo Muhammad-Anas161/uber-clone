@@ -98,7 +98,54 @@ POST /register
   - `token`: Authentication token
   - `user`: User object
 
+#### Example Request...
+
+### GET /user/profile
+- **Description**: Retrieves the authenticated user's profile information.
+- **Headers**:
+  - `Authorization`: Bearer `<jwt_token>` (or via cookie if using cookies)
+- **Response**:
+  - User object
+
 #### Example Request
+```
+GET /user/profile
+Authorization: Bearer <jwt_token>
+```
+
+#### Example Response
+```json
+{
+  "_id": "user_id",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "createdAt": "2025-06-17T12:00:00.000Z"
+}
+```
+
+---
+
+### GET /user/logout
+- **Description**: Logs out the authenticated user by invalidating the JWT token (adds it to a blacklist).
+- **Headers**:
+  - `Authorization`: Bearer `<jwt_token>` (or via cookie if using cookies)
+- **Response**:
+  - `message`: Success message
+
+#### Example Request
+```
+GET /user/logout
+Authorization: Bearer <jwt_token>
+```
+
+#### Example Response
+```json
+{
+  "message": "User logged out successfully"
+}
 ```json
 POST /user/login
 {
