@@ -98,54 +98,7 @@ POST /register
   - `token`: Authentication token
   - `user`: User object
 
-#### Example Request...
-
-### GET /user/profile
-- **Description**: Retrieves the authenticated user's profile information.
-- **Headers**:
-  - `Authorization`: Bearer `<jwt_token>` (or via cookie if using cookies)
-- **Response**:
-  - User object
-
 #### Example Request
-```
-GET /user/profile
-Authorization: Bearer <jwt_token>
-```
-
-#### Example Response
-```json
-{
-  "_id": "user_id",
-  "fullname": {
-    "firstname": "John",
-    "lastname": "Doe"
-  },
-  "email": "john.doe@example.com",
-  "createdAt": "2025-06-17T12:00:00.000Z"
-}
-```
-
----
-
-### GET /user/logout
-- **Description**: Logs out the authenticated user by invalidating the JWT token (adds it to a blacklist).
-- **Headers**:
-  - `Authorization`: Bearer `<jwt_token>` (or via cookie if using cookies)
-- **Response**:
-  - `message`: Success message
-
-#### Example Request
-```
-GET /user/logout
-Authorization: Bearer <jwt_token>
-```
-
-#### Example Response
-```json
-{
-  "message": "User logged out successfully"
-}
 ```json
 POST /user/login
 {
@@ -177,8 +130,188 @@ POST /user/login
 }
 ```
 
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+## Captain API Endpoints
 
-## License
-This project is licensed under the MIT License.
+### POST /captain/register
+- **Description**: Registers a new captain (driver) with vehicle details.
+- **Request Body**:
+  - `fullname`: Object containing:
+    - `firstname`: String (required)
+    - `lastname`: String (required)
+  - `email`: String (required)
+  - `password`: String (required, min 6 chars)
+  - `vehicle`: Object containing:
+    - `color`: String (required)
+    - `plate`: String (required)
+    - `capacity`: Number (required, min 1)
+    - `vehicleType`: String (required, one of: `car`, `bike`, `van`, `truck`, `auto`)
+- **Response**:
+  - `token`: Authentication token
+  - `captain`: Captain object
+
+#### Example Request
+```json
+POST /captain/register
+{
+  "fullname": {
+    "firstname": "Ali",
+    "lastname": "Khan"
+  },
+  "email": "ali.khan@example.com",
+  "password": "strongPassword123",
+  "vehicle": {
+    "color": "White",
+    "plate": "ABC-1234",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+#### Example Response
+```json
+{
+  "token": "<jwt_token>",
+  "captain": {
+    "_id": "captain_id",
+    "fullname": {
+      "firstname": "Ali",
+      "lastname": "Khan"
+    },
+    "email": "ali.khan@example.com",
+    "status": "inactive",
+    "vehicle": {
+      "color": "White",
+      "plate": "ABC-1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+#### Error Response Example
+```json
+{
+  "message": "Captain with this email already exists"
+}
+```
+or
+```json
+{
+  "errors": [
+    {
+      "msg": "Please provide a valid email address",
+      "param": "email",
+      "location": "body"
+    }
+  ]
+}
+```
+
+---
+
+### POST /captain/login
+- **Description**: Authenticates a captain and returns a JWT token.
+- **Request Body**:
+  - `email`: String (required)
+  - `password`: String (required, min 6 chars)
+- **Response**:
+  - `token`: Authentication token
+  - `captain`: Captain object
+
+#### Example Request
+```json
+POST /captain/login
+{
+  "email": "ali.khan@example.com",
+  "password": "strongPassword123"
+}
+```
+
+#### Example Response
+```json
+{
+  "token": "<jwt_token>",
+  "captain": {
+    "_id": "captain_id",
+    "fullname": {
+      "firstname": "Ali",
+      "lastname": "Khan"
+    },
+    "email": "ali.khan@example.com",
+    "status": "inactive",
+    "vehicle": {
+      "color": "White",
+      "plate": "ABC-1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+#### Error Response Example
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+---
+
+### GET /captain/profile
+- **Description**: Retrieves the authenticated captain's profile information.
+- **Headers**:
+  - `Authorization`: Bearer `<jwt_token>` (or via cookie if using cookies)
+- **Response**:
+  - `captain`: Captain object
+
+#### Example Request
+```
+GET /captain/profile
+Authorization: Bearer <jwt_token>
+```
+
+#### Example Response
+```json
+{
+  "captain": {
+    "_id": "captain_id",
+    "fullname": {
+      "firstname": "Ali",
+      "lastname": "Khan"
+    },
+    "email": "ali.khan@example.com",
+    "status": "inactive",
+    "vehicle": {
+      "color": "White",
+      "plate": "ABC-1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+---
+
+### GET /captain/logout
+- **Description**: Logs out the authenticated captain by invalidating the JWT token (adds it to a blacklist).
+- **Headers**:
+  - `Authorization`: Bearer `<jwt_token>` (or via cookie if using cookies)
+- **Response**:
+  - `message`: Success message
+
+#### Example Request
+```
+GET /captain/logout
+Authorization: Bearer <jwt_token>
+```
+
+#### Example Response
+```json
+{
+  "message": "Logged out successfully"
+}
+```
